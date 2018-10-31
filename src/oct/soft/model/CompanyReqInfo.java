@@ -30,4 +30,11 @@ public class CompanyReqInfo {
 	 public void setData(String data) {
 	  this.data = data;
 	 }
+
+	@Override
+	public String toString() {
+		return "CompanyReqInfo [cui=" + cui + ", data=" + data + "]";
+	}
+	 
+	 
 	}

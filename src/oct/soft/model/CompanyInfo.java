@@ -1,5 +1,8 @@
 package oct.soft.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CompanyInfo {
 	private int cui;
 	private String data;
@@ -227,5 +230,30 @@ public class CompanyInfo {
 				+ statusSplitTVA + "]";
 	}
 	
-	
+	public List<Object> getValues() {			
+		return Arrays.asList(getCui()
+				,getData()
+				,getDenumire()
+				,getAdresa()
+				,getScpTVA()
+				,getData_inceput_ScpTVA()
+				,getData_sfarsit_ScpTVA()
+				,getData_anul_imp_ScpTVA()
+				,getMesaj_ScpTVA()
+				,getDataInceputTvaInc()
+				,getDataSfarsitTvaInc()
+				,getDataActualizareTvaInc()
+				,getDataPublicareTvaInc()
+				,getTipActTvaInc()
+				,getStatusTvaIncasare()
+				,getDataInactivare()
+				,getDataReactivare()
+				,getDataPublicare()
+				,getDataRadiere()
+				,getStatusInactivi()
+				,getDataInceputSplitTVA()
+				,getDataAnulareSplitTVA()
+				,getStatusSplitTVA()
+				);
+	}
 }
