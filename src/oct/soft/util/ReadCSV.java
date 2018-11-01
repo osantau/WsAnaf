@@ -23,7 +23,7 @@ public class ReadCSV {
 		Reader in;
 		try {
 			in = new FileReader(filePath);			
-			Iterable<CSVRecord> records = CSVFormat.EXCEL.withDelimiter(',').parse(in);
+			Iterable<CSVRecord> records = CSVFormat.EXCEL.withDelimiter(LocaleUtil.getPatternSeparator()).parse(in);
 			
 			for(CSVRecord record : records) {
 				Date tmpDate = sdfIn.parse(record.get(0));				

@@ -1,7 +1,6 @@
 package oct.soft;
 
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -26,6 +25,10 @@ public class Application {
 		String url = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v3/ws/tva";
 		final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 		ObjectMapper mapper = new ObjectMapper();
+                
+                args = new String[2];
+                args[0]="e:/abc/input.csv";
+                args[1]="e:/abc/output.csv";
 		List<CompanyReqInfo> lista = ReadCSV.getCompanyInfoFromFile(args[0]);		
 		String postBody = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(lista);
 		
@@ -38,10 +41,10 @@ public class Application {
 	
 		BaseObject baseObject = mapper.readValue(content, BaseObject.class);
             WriteResultToCSV.writeToFile(baseObject, args[1]);
-//		OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream("d:/borodi/response.json"), StandardCharsets.UTF_8);
-//		writer.write( mapper.writerWithDefaultPrettyPrinter().writeValueAsString(baseObject));		
-//		writer.flush();
-//		writer.close();
+		OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream("e:/abc/response.json"), StandardCharsets.UTF_8);
+		writer.write( mapper.writerWithDefaultPrettyPrinter().writeValueAsString(baseObject));		
+		writer.flush();
+		writer.close();
 	}
 
 }
