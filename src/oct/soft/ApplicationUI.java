@@ -5,6 +5,23 @@
  */
 package oct.soft;
 
+import java.awt.Cursor;
+import java.io.File;
+import java.util.List;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import oct.soft.model.BaseObject;
+import oct.soft.model.CompanyReqInfo;
+import oct.soft.util.OkHttpUtil;
+import oct.soft.util.ReadCSV;
+import oct.soft.util.WriteResultToCSV;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import org.codehaus.jackson.map.ObjectMapper;
+
 /**
  *
  * @author Octavian Santau
@@ -31,10 +48,12 @@ public class ApplicationUI extends javax.swing.JFrame {
         jFileChooserDestinatie = new javax.swing.JFileChooser();
         jLabel1 = new javax.swing.JLabel();
         btnOpenChooserSrcFile = new javax.swing.JButton();
-        btnOpenChooserDestFile = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabelInf1 = new javax.swing.JLabel();
         jLabelInf2 = new javax.swing.JLabel();
+        jComboBoxCsvSeparator = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        jButtonProcess = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         exitMenuItem = new javax.swing.JMenuItem();
@@ -52,8 +71,15 @@ public class ApplicationUI extends javax.swing.JFrame {
         jFileChooserDestinatie.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         jFileChooserDestinatie.setDialogTitle("Selectati fisier destinatie");
         jFileChooserDestinatie.setFileFilter(new oct.soft.file.filter.CustomFileFilter());
+        jFileChooserDestinatie.setFileSelectionMode(javax.swing.JFileChooser.FILES_AND_DIRECTORIES);
+        jFileChooserDestinatie.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFileChooserDestinatieActionPerformed(evt);
+            }
+        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Verificare agenti economici");
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -66,15 +92,29 @@ public class ApplicationUI extends javax.swing.JFrame {
             }
         });
 
-        btnOpenChooserDestFile.setText("Salveaza fisier");
-        btnOpenChooserDestFile.addActionListener(new java.awt.event.ActionListener() {
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setText("Fisier destinatie:");
+
+        jLabelInf1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+
+        jLabelInf2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+
+        jComboBoxCsvSeparator.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { ";", "," }));
+        jComboBoxCsvSeparator.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOpenChooserDestFileActionPerformed(evt);
+                jComboBoxCsvSeparatorActionPerformed(evt);
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel2.setText("Selectati fisier destinatie:");
+        jLabel3.setText("Separator CSV");
+
+        jButtonProcess.setText("Proceseaza");
+        jButtonProcess.setEnabled(false);
+        jButtonProcess.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonProcessActionPerformed(evt);
+            }
+        });
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -108,17 +148,28 @@ public class ApplicationUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelInf1, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelInf1, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnOpenChooserSrcFile)
+                                .addGap(41, 41, 41)
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBoxCsvSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnOpenChooserSrcFile)
-                            .addComponent(btnOpenChooserDestFile)))
-                    .addComponent(jLabelInf2, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel2)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButtonProcess)
+                                .addGap(263, 263, 263))
+                            .addComponent(jLabelInf2, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,16 +177,18 @@ public class ApplicationUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnOpenChooserSrcFile))
+                    .addComponent(btnOpenChooserSrcFile)
+                    .addComponent(jComboBoxCsvSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelInf1)
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnOpenChooserDestFile)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabelInf2)
-                .addContainerGap(133, Short.MAX_VALUE))
+                .addComponent(jLabelInf1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelInf2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addComponent(jButtonProcess)
+                .addContainerGap())
         );
 
         pack();
@@ -147,16 +200,64 @@ public class ApplicationUI extends javax.swing.JFrame {
 
     private void btnOpenChooserSrcFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenChooserSrcFileActionPerformed
         // TODO add your handling code here:
-        jFileChooserSursa.showOpenDialog(this);
+        int result = jFileChooserSursa.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+        File selectedFile = jFileChooserSursa.getSelectedFile();
+        if( selectedFile != null) {
+        sourceFilePath = selectedFile.getPath();
+        jLabelInf1.setText(sourceFilePath);
+        destFilePath = selectedFile.getParentFile().getPath()+File.separator+"rezultat.csv";
+        jLabelInf2.setText(destFilePath);
+        jButtonProcess.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Selectati un fisier !", "Atentie", JOptionPane.WARNING_MESSAGE);
+        }
+        } 
     }//GEN-LAST:event_btnOpenChooserSrcFileActionPerformed
 
-    private void btnOpenChooserDestFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenChooserDestFileActionPerformed
-      jFileChooserDestinatie.showSaveDialog(this);
-    }//GEN-LAST:event_btnOpenChooserDestFileActionPerformed
-
     private void jFileChooserSursaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooserSursaActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:                
     }//GEN-LAST:event_jFileChooserSursaActionPerformed
+
+    private void jComboBoxCsvSeparatorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxCsvSeparatorActionPerformed
+
+    }//GEN-LAST:event_jComboBoxCsvSeparatorActionPerformed
+
+    private void jFileChooserDestinatieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooserDestinatieActionPerformed
+//         jLabelInf2.setText(jFileChooserSursa.getSelectedFile().toString());
+    }//GEN-LAST:event_jFileChooserDestinatieActionPerformed
+
+    private void jButtonProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProcessActionPerformed
+        try {                
+                String url = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v3/ws/tva";
+		final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+		ObjectMapper mapper = new ObjectMapper();
+                csvSeparator = jComboBoxCsvSeparator.getSelectedItem().toString();
+		List<CompanyReqInfo> lista = ReadCSV.getCompanyInfoFromFile(sourceFilePath,csvSeparator);                
+                if( lista != null && lista.size()>0) {
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		String postBody = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(lista);
+		          System.out.println(ReadCSV.numRecords);
+		OkHttpUtil.init(true);
+		OkHttpClient client = OkHttpUtil.getClient();
+		RequestBody body = RequestBody.create(JSON, postBody);
+		Request request = new Request.Builder().url(url).post(body).build();
+		Response response = client.newCall(request).execute();
+		String content = response.body().string();	
+		BaseObject baseObject = mapper.readValue(content, BaseObject.class);
+                System.out.println(baseObject.getFound().size());
+                WriteResultToCSV.writeToFile(baseObject, destFilePath);	
+                jFileChooserSursa.setSelectedFile(new File(""));     
+                this.setCursor(Cursor.getDefaultCursor());
+                String message = "S-au procesat:"+WriteResultToCSV.numRecords+" din "+ReadCSV.numRecords+" !";
+                JOptionPane.showMessageDialog(this, message, "Procesare inregistrari", JOptionPane.INFORMATION_MESSAGE);
+                }
+        } catch(Exception ex) {
+            JOptionPane.showMessageDialog(this,"Eroare: "+ex.getMessage(),"Eroare",JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException("Eroare");
+        }
+                
+    }//GEN-LAST:event_jButtonProcessActionPerformed
 
     /**
      * @param args the command line arguments
@@ -192,21 +293,26 @@ public class ApplicationUI extends javax.swing.JFrame {
             }
         });
     }
-
+     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
-    private javax.swing.JButton btnOpenChooserDestFile;
     private javax.swing.JButton btnOpenChooserSrcFile;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JButton jButtonProcess;
+    private javax.swing.JComboBox<String> jComboBoxCsvSeparator;
     private javax.swing.JFileChooser jFileChooserDestinatie;
     private javax.swing.JFileChooser jFileChooserSursa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelInf1;
     private javax.swing.JLabel jLabelInf2;
     private javax.swing.JMenuBar menuBar;
     // End of variables declaration//GEN-END:variables
 
+  private String sourceFilePath;
+  private String destFilePath;
+  private String csvSeparator; 
 }

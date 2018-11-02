@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -16,7 +17,8 @@ import oct.soft.model.CompanyInfo;
 
 public class WriteResultToCSV {
 public static int numRecords = 0;
-    public static void writeToFile(BaseObject baseObject, String path) throws Exception {
+    public static void writeToFile(BaseObject baseObject, String path) {
+        try{ 
         BufferedWriter writer = Files.newBufferedWriter(Paths.get(path, "")
                 ,StandardCharsets.UTF_8
                 ,StandardOpenOption.CREATE);   
@@ -30,7 +32,10 @@ public static int numRecords = 0;
         }
         csvPrinter.flush();
         csvPrinter.close();
-
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,"Eroare: "+ex.getMessage(),"Eroare",JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException("Eroare");
+        }
     }
 
     private static String[] getHeader() {

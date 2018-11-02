@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -16,14 +17,15 @@ public class ReadCSV {
 
 	public static int numRecords = 0;
         
-	public static List<CompanyReqInfo> getCompanyInfoFromFile(String filePath)  {
+	public static List<CompanyReqInfo> getCompanyInfoFromFile(String filePath, String csvSeparator)  {
 		List<CompanyReqInfo> companyInfoList = new ArrayList<CompanyReqInfo>();
 		SimpleDateFormat sdfIn = new SimpleDateFormat("dd.mm.yyyy");
 		SimpleDateFormat sdfOut = new SimpleDateFormat("yyyy-mm-dd");
-		Reader in;
+		Reader in;                 
+                char separator = (csvSeparator==null ? LocaleUtil.getPatternSeparator() : csvSeparator.charAt(0));
 		try {
 			in = new FileReader(filePath);			
-			Iterable<CSVRecord> records = CSVFormat.EXCEL.withDelimiter(LocaleUtil.getPatternSeparator()).parse(in);
+			Iterable<CSVRecord> records = CSVFormat.EXCEL.withDelimiter(separator).parse(in);
 			
 			for(CSVRecord record : records) {
 				Date tmpDate = sdfIn.parse(record.get(0));				
@@ -33,10 +35,9 @@ public class ReadCSV {
 			}
 			in.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 		
-		
+                    JOptionPane.showMessageDialog(null, "Verificati structura fisierului sursa: separator,data,cui!", "Eroare", JOptionPane.ERROR_MESSAGE);
+                    throw new RuntimeException("Eroare");
+		} 				
 		return companyInfoList;
 	}
 }
