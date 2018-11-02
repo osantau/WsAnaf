@@ -26,9 +26,6 @@ public class Application {
 		final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 		ObjectMapper mapper = new ObjectMapper();
                 
-                args = new String[2];
-                args[0]="e:/abc/input.csv";
-                args[1]="e:/abc/output.csv";
 		List<CompanyReqInfo> lista = ReadCSV.getCompanyInfoFromFile(args[0]);		
 		String postBody = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(lista);
 		
