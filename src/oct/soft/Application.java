@@ -37,11 +37,7 @@ public class Application {
 		String content = response.body().string();
 	
 		BaseObject baseObject = mapper.readValue(content, BaseObject.class);
-            WriteResultToCSV.writeToFile(baseObject, args[1]);
-		OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream("e:/abc/response.json"), StandardCharsets.UTF_8);
-		writer.write( mapper.writerWithDefaultPrettyPrinter().writeValueAsString(baseObject));		
-		writer.flush();
-		writer.close();
+                WriteResultToCSV.writeToFile(baseObject, args[1]);		
 	}
 
 }
