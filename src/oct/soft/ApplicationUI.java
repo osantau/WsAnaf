@@ -7,10 +7,17 @@ package oct.soft;
 
 import java.awt.Cursor;
 import java.io.File;
+import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import oct.soft.model.BaseObject;
+import oct.soft.model.CompanyInfo;
 import oct.soft.model.CompanyReqInfo;
 import oct.soft.util.OkHttpUtil;
 import oct.soft.util.ReadCSV;
@@ -21,6 +28,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
@@ -54,6 +62,7 @@ public class ApplicationUI extends javax.swing.JFrame {
         jComboBoxCsvSeparator = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jButtonProcess = new javax.swing.JButton();
+        jButtonPunctualCheck = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         exitMenuItem = new javax.swing.JMenuItem();
@@ -116,6 +125,13 @@ public class ApplicationUI extends javax.swing.JFrame {
             }
         });
 
+        jButtonPunctualCheck.setText("Verificare puntuala");
+        jButtonPunctualCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPunctualCheckActionPerformed(evt);
+            }
+        });
+
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
 
@@ -161,15 +177,19 @@ public class ApplicationUI extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jComboBoxCsvSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButtonProcess)
-                                .addGap(263, 263, 263))
-                            .addComponent(jLabelInf2, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addComponent(jLabel2)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jButtonProcess)
+                                        .addGap(263, 263, 263))
+                                    .addComponent(jLabelInf2, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                                .addComponent(jButtonPunctualCheck, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,7 +207,9 @@ public class ApplicationUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelInf2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addComponent(jButtonProcess)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonProcess)
+                    .addComponent(jButtonPunctualCheck))
                 .addContainerGap())
         );
 
@@ -259,6 +281,60 @@ public class ApplicationUI extends javax.swing.JFrame {
                 
     }//GEN-LAST:event_jButtonProcessActionPerformed
 
+    private void jButtonPunctualCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPunctualCheckActionPerformed
+        // TODO add your handling code here:
+        JTextField cif = new JTextField();
+        JXDatePicker data = new JXDatePicker();
+        data.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
+        data.setDate(new Date());
+        data.setLocale(new Locale("ro"));
+        
+        Object[] message = {"CIF:",cif,"Data verificare:",data};
+        int option  = JOptionPane.showConfirmDialog(rootPane, message,"Verificare puntuala",JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            if (cif.getText().trim().length() ==0)
+            {
+                JOptionPane.showMessageDialog(rootPane, "Campul CIF este obligatoriu!","Atentie!",JOptionPane.ERROR_MESSAGE);
+                return;
+            } else {
+                String url = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v3/ws/tva";
+		final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+                ObjectMapper mapper = new ObjectMapper();
+                List<CompanyReqInfo> lista = new ArrayList<>();
+                lista.add(new CompanyReqInfo(Integer.valueOf(cif.getText().trim())
+                        , new SimpleDateFormat("yyyy-MM-dd").format(data.getDate())));
+                try{
+                String postBody = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(lista);
+		
+		OkHttpUtil.init(true);
+		OkHttpClient client = OkHttpUtil.getClient();
+		RequestBody body = RequestBody.create(JSON, postBody);
+		Request request = new Request.Builder().url(url).post(body).build();
+		Response response = client.newCall(request).execute();
+		String content = response.body().string();
+                BaseObject baseObject = mapper.readValue(content, BaseObject.class);
+                CompanyInfo companyInfo= baseObject.getFound().get(0);
+                StringBuilder sb = new StringBuilder("<html>");
+                for (String s:WriteResultToCSV.getHeader()){
+                    Field field = companyInfo.getClass().getDeclaredField(s);
+                    field.setAccessible(true);
+                    sb.append(s+" = "+field.get(companyInfo)).append("<br />");
+                }
+                sb.append("</html>");
+                JOptionPane.showMessageDialog(rootPane, sb.toString(),"Informatii pt "+companyInfo.getDenumire(),
+                        JOptionPane.INFORMATION_MESSAGE);
+                }
+                catch (Exception ex){
+                 JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+                        }
+                
+            }
+                
+            System.out.println(cif.getText());
+            System.out.println(new SimpleDateFormat("yyyy-MM-dd").format(data.getDate()));
+        }
+    }//GEN-LAST:event_jButtonPunctualCheckActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -301,6 +377,7 @@ public class ApplicationUI extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JButton jButtonProcess;
+    private javax.swing.JButton jButtonPunctualCheck;
     private javax.swing.JComboBox<String> jComboBoxCsvSeparator;
     private javax.swing.JFileChooser jFileChooserDestinatie;
     private javax.swing.JFileChooser jFileChooserSursa;

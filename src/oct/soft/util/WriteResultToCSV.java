@@ -38,7 +38,7 @@ public static int numRecords = 0;
         }
     }
 
-    private static String[] getHeader() {
+    public static String[] getHeader() {
         StringBuilder sb = new StringBuilder();
 
         Field[] fields = CompanyInfo.class.getDeclaredFields();
