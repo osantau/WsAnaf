@@ -5,11 +5,7 @@
  */
 package oct.soft;
 
-import java.util.List;
-import oct.soft.model.CompanyInfo;
-import oct.soft.model.HibernateUtil;
-import org.hibernate.Query;
-import org.hibernate.Session;
+import oct.soft.dao.CompanyInfoDao;
 
 /**
  *
@@ -29,11 +25,8 @@ public class Test {
 //        session.clear();
 //        session.close();     
 //        session=null; 
-       Session session  = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
-        Query q = session.createQuery("FROM CompanyInfo");
-        List<CompanyInfo> lista=q.list();
-        session.close();
-        System.out.println(lista.size());        
+        CompanyInfoDao companyInfoDao = new CompanyInfoDao();
+        System.out.println(companyInfoDao.findAll().size());  
+        System.exit(0);
     }
 }

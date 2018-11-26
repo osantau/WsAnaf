@@ -16,6 +16,7 @@ import java.util.Locale;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import oct.soft.dao.CompanyInfoDao;
 import oct.soft.model.BaseObject;
 import oct.soft.model.CompanyInfo;
 import oct.soft.model.CompanyReqInfo;
@@ -314,6 +315,8 @@ public class ApplicationUI extends javax.swing.JFrame {
 		String content = response.body().string();
                 BaseObject baseObject = mapper.readValue(content, BaseObject.class);
                 CompanyInfo companyInfo= baseObject.getFound().get(0);
+                CompanyInfoDao companyInfoDao = new CompanyInfoDao();
+                companyInfoDao.persist(companyInfo);
                 StringBuilder sb = new StringBuilder("<html>");
                 for (String s:WriteResultToCSV.getHeader()){
                     Field field = companyInfo.getClass().getDeclaredField(s);

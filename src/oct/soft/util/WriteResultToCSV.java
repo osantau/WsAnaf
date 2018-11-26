@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import javax.swing.JOptionPane;
+import oct.soft.dao.CompanyInfoDao;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -32,6 +33,8 @@ public static int numRecords = 0;
         }
         csvPrinter.flush();
         csvPrinter.close();
+            CompanyInfoDao companyInfoDao = new CompanyInfoDao();
+            companyInfoDao.persist(baseObject.getFound());
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,"Eroare: "+ex.getMessage(),"Eroare",JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException("Eroare");
