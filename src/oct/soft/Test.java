@@ -26,6 +26,7 @@ public class Test {
         ByteArrayInputStream bais = new ByteArrayInputStream(content.getBytes("UTF-8"));
          BaseObject baseObject = mapper.readValue(bais, BaseObject.class); 
         CompanyInfoDao companyInfoDao = new CompanyInfoDao();
+//        companyInfoDao.persist(baseObject.getFound());
         System.out.println(companyInfoDao.findAll().size());
         System.exit(0);
     }
