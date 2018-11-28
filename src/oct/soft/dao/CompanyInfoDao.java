@@ -16,16 +16,16 @@ import oct.soft.model.CompanyInfo;
 public class CompanyInfoDao extends BaseDao implements DaoInterface<CompanyInfo, Long>{
 
     @Override
-    public void persist(CompanyInfo entity) {
+    public void save(CompanyInfo entity) {
         openCurrentSessionwithTransaction();
-        getCurrentSession().persist(entity);
+        getCurrentSession().save(entity);
         closeCurrentSessionwithTransaction();
     }
     
-      public void persist(List<CompanyInfo> entities) {
+      public void save(List<CompanyInfo> entities) {
         
           for(CompanyInfo companyInfo : entities) {
-              persist(companyInfo);
+              save(companyInfo);
           }
     
     }

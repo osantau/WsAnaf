@@ -34,7 +34,7 @@ public static int numRecords = 0;
         csvPrinter.flush();
         csvPrinter.close();
             CompanyInfoDao companyInfoDao = new CompanyInfoDao();
-            companyInfoDao.persist(baseObject.getFound());
+            companyInfoDao.save(baseObject.getFound());
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,"Eroare: "+ex.getMessage(),"Eroare",JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException("Eroare");

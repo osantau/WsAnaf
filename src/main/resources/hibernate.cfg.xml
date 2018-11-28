@@ -42,7 +42,7 @@ Contributor(s):
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">org.h2.Driver</property>
-        <property name="hibernate.connection.url">jdbc:h2:file:./db/wsanaf;DB_CLOSE_ON_EXIT=TRUE</property>      
+        <property name="hibernate.connection.url">jdbc:h2:file:./db/wsanaf</property>      
         <property name="hibernate.default_schema">PUBLIC</property>  
         <property name="hibernate.connection.username">sa</property>
         <!--<property name="hibernate.connection.password">sa</property>-->
