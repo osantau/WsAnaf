@@ -270,6 +270,8 @@ public class ApplicationUI extends javax.swing.JFrame {
 		BaseObject baseObject = mapper.readValue(content, BaseObject.class);
                 System.out.println(baseObject.getFound().size());
                 WriteResultToCSV.writeToFile(baseObject, destFilePath);	
+                CompanyInfoDao companyInfoDao = new CompanyInfoDao();
+                companyInfoDao.persist(baseObject.getFound());
                 jFileChooserSursa.setSelectedFile(new File(""));     
                 this.setCursor(Cursor.getDefaultCursor());
                 String message = "S-au procesat:"+WriteResultToCSV.numRecords+" din "+ReadCSV.numRecords+" !";

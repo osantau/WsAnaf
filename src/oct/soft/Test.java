@@ -5,11 +5,13 @@
  */
 package oct.soft;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
+import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import oct.soft.dao.CompanyInfoDao;
 import oct.soft.model.BaseObject;
-import oct.soft.model.CompanyInfo;
-import oct.soft.model.HibernateUtil;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
@@ -18,10 +20,13 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 public class Test {
     public static void main(String[] args) throws Exception {
-        ObjectMapper mapper = new ObjectMapper(); 
-        BaseObject baseObject = mapper.readValue(new File("d:/testul.json"), BaseObject.class);        
+        ObjectMapper mapper = new ObjectMapper();                   
+        Path path = Paths.get("e:/testul.json");
+        String content = URLDecoder.decode(new String(Files.readAllBytes(path)), "UTF-8"); 
+        ByteArrayInputStream bais = new ByteArrayInputStream(content.getBytes("UTF-8"));
+         BaseObject baseObject = mapper.readValue(bais, BaseObject.class); 
         CompanyInfoDao companyInfoDao = new CompanyInfoDao();
-        companyInfoDao.persist(baseObject.getFound());
+        System.out.println(companyInfoDao.findAll().size());
         System.exit(0);
     }
 }
