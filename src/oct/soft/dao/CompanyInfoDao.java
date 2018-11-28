@@ -23,10 +23,11 @@ public class CompanyInfoDao extends BaseDao implements DaoInterface<CompanyInfo,
     }
     
       public void save(List<CompanyInfo> entities) {
-        
+         openCurrentSessionwithTransaction();
           for(CompanyInfo companyInfo : entities) {
-              save(companyInfo);
+              getCurrentSession().save(companyInfo);
           }
+          closeCurrentSessionwithTransaction();
     
     }
 
