@@ -5,15 +5,14 @@
  */
 package oct.soft;
 
-import java.io.ByteArrayInputStream;
-import java.net.URLDecoder;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import oct.soft.dao.CompanyInfoDao;
-import oct.soft.db.util.DBManager;
-import oct.soft.model.BaseObject;
-import org.codehaus.jackson.map.ObjectMapper;
+import java.util.HashMap;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
+import oct.soft.dao.BaseDao;
+import java.sql.Connection;
+import java.util.Map;
+import org.hibernate.internal.SessionImpl;
 
 /**
  *
@@ -21,19 +20,18 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 public class Test {
     public static void main(String[] args) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();                   
+     /*   ObjectMapper mapper = new ObjectMapper();                   
         Path path = Paths.get("e:/testul.json");
         String content = URLDecoder.decode(new String(Files.readAllBytes(path)), "UTF-8"); 
         ByteArrayInputStream bais = new ByteArrayInputStream(content.getBytes("UTF-8"));
-         BaseObject baseObject = mapper.readValue(bais, BaseObject.class); 
-         DBManager.startDB();
+        BaseObject baseObject = mapper.readValue(bais, BaseObject.class);          
         CompanyInfoDao companyInfoDao = new CompanyInfoDao();                
-        companyInfoDao.save(baseObject.getFound());
-        DBManager.stopDB();
+        companyInfoDao.save(baseObject.getFound());*/
+        
 //        System.out.println(companyInfoDao.findAll().size());
         
 //        Connection conn = HibernateUtil.getSessionFactory().getSessionFactoryOptions().getServiceRegistry().getService(ConnectionProvider.class).getConnection();
-   /* BaseDao baseDao = new BaseDao();  
+    BaseDao baseDao = new BaseDao();  
      SessionImpl sessionImpl = (SessionImpl) baseDao.openCurrentSession();
      Connection conn =sessionImpl.connection();
         System.out.println("oct.soft.Test.main()");
@@ -42,7 +40,7 @@ public class Test {
         JasperPrint jasperPrint = JasperFillManager.fillReport("./reports/report.jasper",parameters ,conn);    
         sessionImpl.close();
         baseDao.closeCurrentSession();
-        JasperViewer.viewReport(jasperPrint);*/
-        System.exit(0);
+        JasperViewer.viewReport(jasperPrint);
+//        System.exit(0);
     }
 }
