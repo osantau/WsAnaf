@@ -17,6 +17,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import oct.soft.dao.CompanyInfoDao;
+import oct.soft.db.util.DBManager;
 import oct.soft.model.BaseObject;
 import oct.soft.model.CompanyInfo;
 import oct.soft.model.CompanyReqInfo;
@@ -91,6 +92,14 @@ public class ApplicationUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Verificare agenti economici");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setText("Selectati fisier sursa:");
@@ -339,6 +348,20 @@ public class ApplicationUI extends javax.swing.JFrame {
             System.out.println(new SimpleDateFormat("yyyy-MM-dd").format(data.getDate()));
         }
     }//GEN-LAST:event_jButtonPunctualCheckActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        if(DBManager.isH2database()){
+            DBManager.startDB();
+        }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+        if(DBManager.isH2database()) {
+            DBManager.stopDB();
+        }
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments

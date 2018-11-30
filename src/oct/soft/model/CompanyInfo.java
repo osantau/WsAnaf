@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
@@ -254,6 +255,7 @@ public class CompanyInfo {
                 + statusSplitTVA + "]";
     }
 
+    @Transient
     public List<Object> getValues() {
         return Arrays.asList(getCui(),
                 getData(),

@@ -10,11 +10,9 @@ import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import oct.soft.dao.CompanyInfoDao;
+import oct.soft.db.util.DBManager;
 import oct.soft.model.BaseObject;
-import oct.soft.model.CompanyInfo;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
@@ -28,9 +26,23 @@ public class Test {
         String content = URLDecoder.decode(new String(Files.readAllBytes(path)), "UTF-8"); 
         ByteArrayInputStream bais = new ByteArrayInputStream(content.getBytes("UTF-8"));
          BaseObject baseObject = mapper.readValue(bais, BaseObject.class); 
+         DBManager.startDB();
         CompanyInfoDao companyInfoDao = new CompanyInfoDao();                
         companyInfoDao.save(baseObject.getFound());
+        DBManager.stopDB();
 //        System.out.println(companyInfoDao.findAll().size());
+        
+//        Connection conn = HibernateUtil.getSessionFactory().getSessionFactoryOptions().getServiceRegistry().getService(ConnectionProvider.class).getConnection();
+   /* BaseDao baseDao = new BaseDao();  
+     SessionImpl sessionImpl = (SessionImpl) baseDao.openCurrentSession();
+     Connection conn =sessionImpl.connection();
+        System.out.println("oct.soft.Test.main()");
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("MSG", "Salutare de la mare!");
+        JasperPrint jasperPrint = JasperFillManager.fillReport("./reports/report.jasper",parameters ,conn);    
+        sessionImpl.close();
+        baseDao.closeCurrentSession();
+        JasperViewer.viewReport(jasperPrint);*/
         System.exit(0);
     }
 }

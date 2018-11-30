@@ -24,8 +24,7 @@ public class HibernateUtil {
     private static final SessionFactory sessionFactory;
     public static void main(String[] args) throws Exception{
     Properties properties = new Properties();           
-            properties.load(new FileReader("./config/app.properties"));
-        System.out.println(properties.get("db.type"));        
+            properties.load(new FileReader("./config/app.properties"));       
     }
     static {
         try {
@@ -50,5 +49,5 @@ public class HibernateUtil {
 
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
-    }
+    }        
 }
