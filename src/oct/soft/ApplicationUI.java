@@ -20,6 +20,7 @@ import oct.soft.dao.CompanyInfoDao;
 import oct.soft.model.BaseObject;
 import oct.soft.model.CompanyInfo;
 import oct.soft.model.CompanyReqInfo;
+import oct.soft.util.DBManager;
 import oct.soft.util.OkHttpUtil;
 import oct.soft.util.ReadCSV;
 import oct.soft.util.WriteResultToCSV;
@@ -41,6 +42,9 @@ public class ApplicationUI extends javax.swing.JFrame {
      * Creates new form ApplicationUI
      */
     public ApplicationUI() {
+        if(DBManager.isH2database()){
+         DBManager.startDB();   
+        }        
         initComponents();
     }
 
@@ -91,6 +95,11 @@ public class ApplicationUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Verificare agenti economici");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setText("Selectati fisier sursa:");
@@ -340,6 +349,13 @@ public class ApplicationUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonPunctualCheckActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        if(DBManager.isH2database()) {
+            DBManager.stopDB();
+        }
+    }//GEN-LAST:event_formWindowClosing
+
     /**
      * @param args the command line arguments
      */
@@ -374,7 +390,7 @@ public class ApplicationUI extends javax.swing.JFrame {
             }
         });
     }
-     
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JButton btnOpenChooserSrcFile;
