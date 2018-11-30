@@ -14,8 +14,8 @@ public class DBManager {
     }
      public static void startDB() {
         try {
-            server= Server.createTcpServer("-tcpPort", "9092", "-tcpAllowOthers","-baseDir","./db").start();
-              System.out.println(server.getStatus());
+            server= Server.createTcpServer("-tcpPort", "9092", "-tcpAllowOthers","-baseDir","./db").start();           
+            System.out.println(server.getStatus());
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
