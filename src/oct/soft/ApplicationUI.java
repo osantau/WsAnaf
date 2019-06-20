@@ -11,15 +11,23 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 import oct.soft.dao.CompanyInfoDao;
 import oct.soft.model.BaseObject;
 import oct.soft.model.CompanyInfo;
 import oct.soft.model.CompanyReqInfo;
+import oct.soft.model.HibernateUtil;
 import oct.soft.util.DBManager;
 import oct.soft.util.OkHttpUtil;
 import oct.soft.util.ReadCSV;
@@ -30,6 +38,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.hibernate.internal.SessionImpl;
 import org.jdesktop.swingx.JXDatePicker;
 
 /**
@@ -260,8 +269,7 @@ public class ApplicationUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jFileChooserDestinatieActionPerformed
 
     private void jButtonProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProcessActionPerformed
-        try {                
-                String url = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v3/ws/tva";
+        try {                             
 		final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 		ObjectMapper mapper = new ObjectMapper();
                 csvSeparator = jComboBoxCsvSeparator.getSelectedItem().toString();
@@ -308,8 +316,7 @@ public class ApplicationUI extends javax.swing.JFrame {
             {
                 JOptionPane.showMessageDialog(rootPane, "Campul CIF este obligatoriu!","Atentie!",JOptionPane.ERROR_MESSAGE);
                 return;
-            } else {
-                String url = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v3/ws/tva";
+            } else {               
 		final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
                 ObjectMapper mapper = new ObjectMapper();
                 List<CompanyReqInfo> lista = new ArrayList<>();
@@ -327,7 +334,7 @@ public class ApplicationUI extends javax.swing.JFrame {
                 BaseObject baseObject = mapper.readValue(content, BaseObject.class);
                 CompanyInfo companyInfo= baseObject.getFound().get(0);
                 CompanyInfoDao companyInfoDao = new CompanyInfoDao();
-                companyInfoDao.save(companyInfo);
+                companyInfoDao.save(companyInfo);                
                 StringBuilder sb = new StringBuilder("<html>");
                 for (String s:WriteResultToCSV.getHeader()){
                     Field field = companyInfo.getClass().getDeclaredField(s);
@@ -337,6 +344,16 @@ public class ApplicationUI extends javax.swing.JFrame {
                 sb.append("</html>");
                 JOptionPane.showMessageDialog(rootPane, sb.toString(),"Informatii pt "+companyInfo.getDenumire(),
                         JOptionPane.INFORMATION_MESSAGE);
+              /*      SessionImpl session = (SessionImpl) HibernateUtil.getSessionFactory().openSession();
+                    
+                    JasperReport report = JasperCompileManager.compileReport("./reports/company.jrxml");
+                    Map<String, Object> parameters = new HashMap<String, Object>();
+                    parameters.put("CompanyInfoId",companyInfo.getId());
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, session.connection());
+                    session.close();
+                    JasperViewer viewer = new JasperViewer(jasperPrint);
+                    viewer.setVisible(true);*/
+                    
                 }
                 catch (Exception ex){
                  JOptionPane.showMessageDialog(rootPane, ex.getMessage());
@@ -413,4 +430,5 @@ public class ApplicationUI extends javax.swing.JFrame {
   private String sourceFilePath;
   private String destFilePath;
   private String csvSeparator; 
+  private final String url = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v4/ws/tva";
 }

@@ -46,7 +46,7 @@ public class CompanyInfo {
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
-
+    private String iban;
     // Getter Methods
     public int getCui() {
         return cui;
@@ -255,6 +255,21 @@ public class CompanyInfo {
                 + statusSplitTVA + "]";
     }
 
+    public String getIban() {
+        return iban;
+    }
+
+    
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public Long getId() {
+        return id;
+    }
+    
+    
+
     @Transient
     public List<Object> getValues() {
         return Arrays.asList(getCui(),
@@ -279,7 +294,8 @@ public class CompanyInfo {
                 getStatusInactivi(),
                 getDataInceputSplitTVA(),
                 getDataAnulareSplitTVA(),
-                getStatusSplitTVA()
+                getStatusSplitTVA(),
+                getIban()
         );
     }
 }
