@@ -11,23 +11,19 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.view.JasperViewer;
+import javax.swing.text.Document;
+import javax.swing.text.html.HTMLEditorKit;
 import oct.soft.dao.CompanyInfoDao;
 import oct.soft.model.BaseObject;
 import oct.soft.model.CompanyInfo;
 import oct.soft.model.CompanyReqInfo;
-import oct.soft.model.HibernateUtil;
 import oct.soft.util.DBManager;
 import oct.soft.util.OkHttpUtil;
 import oct.soft.util.ReadCSV;
@@ -38,7 +34,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.hibernate.internal.SessionImpl;
 import org.jdesktop.swingx.JXDatePicker;
 
 /**
@@ -342,7 +337,15 @@ public class ApplicationUI extends javax.swing.JFrame {
                     sb.append(s+" = "+field.get(companyInfo)).append("<br />");
                 }
                 sb.append("</html>");
-                JOptionPane.showMessageDialog(rootPane, sb.toString(),"Informatii pt "+companyInfo.getDenumire(),
+                    JEditorPane jEditorPane = new JEditorPane();
+                    jEditorPane.setEditable(false);
+                    JScrollPane scrollPane = new JScrollPane(jEditorPane); 
+                    HTMLEditorKit kit = new HTMLEditorKit();
+                    jEditorPane.setEditorKit(kit);
+                    Document doc = kit.createDefaultDocument();                     
+                    jEditorPane.setDocument(doc);
+                    jEditorPane.setText(companyInfo.getHtmlInfo());
+                JOptionPane.showMessageDialog(rootPane, jEditorPane,"Informatii pt "+companyInfo.getDenumire(),
                         JOptionPane.INFORMATION_MESSAGE);
               /*      SessionImpl session = (SessionImpl) HibernateUtil.getSessionFactory().openSession();
                     

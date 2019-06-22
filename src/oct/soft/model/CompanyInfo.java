@@ -47,6 +47,7 @@ public class CompanyInfo {
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
     private String iban;
+
     // Getter Methods
     public int getCui() {
         return cui;
@@ -259,7 +260,6 @@ public class CompanyInfo {
         return iban;
     }
 
-    
     public void setIban(String iban) {
         this.iban = iban;
     }
@@ -267,8 +267,6 @@ public class CompanyInfo {
     public Long getId() {
         return id;
     }
-    
-    
 
     @Transient
     public List<Object> getValues() {
@@ -297,5 +295,32 @@ public class CompanyInfo {
                 getStatusSplitTVA(),
                 getIban()
         );
+    }
+
+    @Transient
+    public String getHtmlInfo() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<!doctype html>")
+                .append("<html><head><meta charset='utf-8'><title>Verificare Agent economic ").append(getDenumire()).append("</title></head>")
+                .append("<body>")
+                .append("<h2>Rezultat</h2>")
+                .append("<table>")
+                .append("<tr><td>CUI:</td><td>").append(getCui()).append("</td></tr>")
+                 .append("<tr><td>Data pt. care se efectueaza cautarea:</td><td>").append(getData()).append("</td></tr>")
+                 .append("<tr><td>Denumire:</td><td>").append(getDenumire()).append("</td></tr>")
+                .append("<tr><td>Adresa:</td><td>").append(getAdresa()).append("</td></tr>")
+                .append("<tr><td>Platitor  in scopuri de TVA la data cautata:</td><td>").append(
+                        getScpTVA()==true ? "DA":"NU").append("</td></tr>")
+                .append("<tr><td>Data inregistrarii in scopuri de TVA anterioara:</td><td>").append(
+                        getData_inceput_ScpTVA()).append("</td></tr>")                
+                .append("<tr><td>Data anularii inregistrarii in scopuri de TVA:</td><td>").append(
+                        getData_sfarsit_ScpTVA()).append("</td></tr>")          
+                .append("<tr><td>Data operarii anularii inregistrarii in scopuri de TVA:</td><td>").append(
+                        getData_anul_imp_ScpTVA()).append("</td></tr>")          
+                .append("<tr><td>MESAJ:</td><td><strong>").append(
+                        getMesaj_ScpTVA()).append("</strong></td></tr>")  
+                .append("</table>")
+                .append("</body></html>");
+        return sb.toString();
     }
 }
