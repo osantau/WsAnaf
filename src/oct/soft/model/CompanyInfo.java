@@ -306,8 +306,8 @@ public class CompanyInfo {
                 .append("<h2>Rezultat</h2>")
                 .append("<table>")
                 .append("<tr><td>CUI:</td><td>").append(getCui()).append("</td></tr>")
-                 .append("<tr><td>Data pt. care se efectueaza cautarea:</td><td>").append(getData()).append("</td></tr>")
-                 .append("<tr><td>Denumire:</td><td>").append(getDenumire()).append("</td></tr>")
+                 .append("<tr><td>Data pt. care se efectueaza cautarea:</td><td><strong>").append(getData()).append("</td></tr>")
+                 .append("<tr><td>Denumire:</td><td>").append(getDenumire()).append("</strong></td></tr>")
                 .append("<tr><td>Adresa:</td><td>").append(getAdresa()).append("</td></tr>")
                 .append("<tr><td>Platitor  in scopuri de TVA la data cautata:</td><td>").append(
                         getScpTVA()==true ? "DA":"NU").append("</td></tr>")
@@ -319,6 +319,36 @@ public class CompanyInfo {
                         getData_anul_imp_ScpTVA()).append("</td></tr>")          
                 .append("<tr><td>MESAJ:</td><td><strong>").append(
                         getMesaj_ScpTVA()).append("</strong></td></tr>")  
+                 .append("<tr><td>Data de la care aplica sistemul TVA la incasare:</td><td>").append(
+                        getDataInceputTvaInc()).append("</td></tr>")      
+                .append("<tr><td>Data pana la care aplica sistemul TVA la incasare:</td><td>").append(
+                        getDataSfarsitTvaInc()).append("</td></tr>")
+                 .append("<tr><td>Data actualizarii TVA la incasare:</td><td>").append(
+                        getDataActualizareTvaInc()).append("</td></tr>")
+                .append("<tr><td>Data publicarii TVA la incasare:</td><td>").append(
+                        getDataPublicareTvaInc()).append("</td></tr>")
+                  .append("<tr><td>Tip actualizare TVA la incasare:</td><td>").append(
+                        getTipActTvaInc()).append("</td></tr>")
+                  .append("<tr><td>Platitor TVA la incasare la data cautata:</td><td><strong>").append(
+                        getStatusTvaIncasare()==true?"DA":"NU").append("</strong></td></tr>")
+                  .append("<tr><td>Data inactivare:</td><td>").append(
+                        getDataInactivare()).append("</td></tr>")
+                .append("<tr><td>Data reactivare:</td><td>").append(
+                        getDataReactivare()).append("</td></tr>")
+                .append("<tr><td>Data publicare:</td><td>").append(
+                        getDataPublicare()).append("</td></tr>")
+                .append("<tr><td>Data radiere:</td><td>").append(
+                        getDataRadiere()).append("</td></tr>")
+                .append("<tr><td>Inactiv la data cautata:</td><td>").append(
+                        getStatusInactivi()==true?"DA":"NU").append("</td></tr>")
+                 .append("<tr><td>Data inceput split TVA:</td><td>").append(
+                        getDataInceputSplitTVA()).append("</td></tr>")
+                .append("<tr><td>Data anulare split TVA:</td><td>").append(
+                        getDataAnulareSplitTVA()).append("</td></tr>")
+                .append("<tr><td>Aplica plata defalcata a Tva la data cautata:</td><td><strong>").append(
+                        getStatusSplitTVA()==true?"DA":"NU").append("</strong></td></tr>")                
+                .append("<tr><td>Contul IBAN:</td><td><strong>").append(
+                        getIban()).append("</strong></td></tr>")
                 .append("</table>")
                 .append("</body></html>");
         return sb.toString();
