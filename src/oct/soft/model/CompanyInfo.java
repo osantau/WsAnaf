@@ -2,7 +2,9 @@ package oct.soft.model;
 
 import java.util.Arrays;
 import java.util.List;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CompanyInfo {
 
     private int cui;
