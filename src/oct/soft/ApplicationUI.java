@@ -20,7 +20,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLEditorKit;
+<<<<<<< HEAD
 import oct.soft.dao.CompanyInfoDao;
+=======
+>>>>>>> beforedb
 import oct.soft.model.BaseObject;
 import oct.soft.model.CompanyInfo;
 import oct.soft.model.CompanyReqInfo;
@@ -264,7 +267,11 @@ public class ApplicationUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jFileChooserDestinatieActionPerformed
 
     private void jButtonProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProcessActionPerformed
+<<<<<<< HEAD
         try {                             
+=======
+        try {                           
+>>>>>>> beforedb
 		final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 		ObjectMapper mapper = new ObjectMapper();
                 csvSeparator = jComboBoxCsvSeparator.getSelectedItem().toString();
@@ -276,7 +283,7 @@ public class ApplicationUI extends javax.swing.JFrame {
 		OkHttpUtil.init(true);
 		OkHttpClient client = OkHttpUtil.getClient();
 		RequestBody body = RequestBody.create(JSON, postBody);
-		Request request = new Request.Builder().url(url).post(body).build();
+		Request request = new Request.Builder().url(URL_ANAF).post(body).build();
 		Response response = client.newCall(request).execute();
 		String content = response.body().string();	
 		BaseObject baseObject = mapper.readValue(content, BaseObject.class);
@@ -287,7 +294,8 @@ public class ApplicationUI extends javax.swing.JFrame {
                 jFileChooserSursa.setSelectedFile(new File(""));     
                 this.setCursor(Cursor.getDefaultCursor());
                 String message = "S-au procesat:"+WriteResultToCSV.numRecords+" din "+ReadCSV.numRecords+" !";
-                JOptionPane.showMessageDialog(this, message, "Procesare inregistrari", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, message, "Procesare inregistrari", JOptionPane.INFORMATION_MESSAGE);                
+                ReadCSV.numRecords=0;
                 }
         } catch(Exception ex) {
             JOptionPane.showMessageDialog(this,"Eroare: "+ex.getMessage(),"Eroare",JOptionPane.ERROR_MESSAGE);
@@ -311,7 +319,11 @@ public class ApplicationUI extends javax.swing.JFrame {
             {
                 JOptionPane.showMessageDialog(rootPane, "Campul CIF este obligatoriu!","Atentie!",JOptionPane.ERROR_MESSAGE);
                 return;
+<<<<<<< HEAD
             } else {               
+=======
+            } else {                
+>>>>>>> beforedb
 		final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
                 ObjectMapper mapper = new ObjectMapper();
                 List<CompanyReqInfo> lista = new ArrayList<>();
@@ -323,7 +335,7 @@ public class ApplicationUI extends javax.swing.JFrame {
 		OkHttpUtil.init(true);
 		OkHttpClient client = OkHttpUtil.getClient();
 		RequestBody body = RequestBody.create(JSON, postBody);
-		Request request = new Request.Builder().url(url).post(body).build();
+		Request request = new Request.Builder().url(URL_ANAF).post(body).build();
 		Response response = client.newCall(request).execute();
 		String content = response.body().string();
                 BaseObject baseObject = mapper.readValue(content, BaseObject.class);
@@ -337,7 +349,11 @@ public class ApplicationUI extends javax.swing.JFrame {
                     sb.append(s+" = "+field.get(companyInfo)).append("<br />");
                 }
                 sb.append("</html>");
+<<<<<<< HEAD
                     JEditorPane jEditorPane = new JEditorPane();
+=======
+                 JEditorPane jEditorPane = new JEditorPane();
+>>>>>>> beforedb
                     jEditorPane.setEditable(false);
                     JScrollPane scrollPane = new JScrollPane(jEditorPane); 
                     HTMLEditorKit kit = new HTMLEditorKit();
@@ -433,5 +449,9 @@ public class ApplicationUI extends javax.swing.JFrame {
   private String sourceFilePath;
   private String destFilePath;
   private String csvSeparator; 
+<<<<<<< HEAD
   private final String url = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v4/ws/tva";
+=======
+  private final String URL_ANAF = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v6/ws/tva";
+>>>>>>> beforedb
 }

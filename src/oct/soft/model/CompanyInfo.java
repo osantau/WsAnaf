@@ -3,6 +3,7 @@ package oct.soft.model;
 import java.util.Date;
 import java.util.Arrays;
 import java.util.List;
+<<<<<<< HEAD
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,10 +21,24 @@ public class CompanyInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+=======
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class CompanyInfo {
+
+>>>>>>> beforedb
     private int cui;
     private String data;
     private String denumire;
     private String adresa;
+<<<<<<< HEAD
+=======
+    private String nrRegCom;
+    private String telefon;
+    private String codPostal;
+    private String stare_inregistrare;
+>>>>>>> beforedb
     private boolean scpTVA;
     private String data_inceput_ScpTVA;
     private String data_sfarsit_ScpTVA;
@@ -43,10 +58,15 @@ public class CompanyInfo {
     private String dataInceputSplitTVA;
     private String dataAnulareSplitTVA;
     private boolean statusSplitTVA;
+<<<<<<< HEAD
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
     private String iban;
+=======
+    private String iban;
+    private boolean statusRO_e_Factura;
+>>>>>>> beforedb
 
     // Getter Methods
     public int getCui() {
@@ -234,6 +254,7 @@ public class CompanyInfo {
         this.statusSplitTVA = statusSplitTVA;
     }
 
+<<<<<<< HEAD
     public void setCreated(Date created) {
         this.created = created;
     }
@@ -275,6 +296,71 @@ public class CompanyInfo {
                 getDenumire(),
                 getAdresa(),
                 getScpTVA(),
+=======
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public boolean getStatusRO_e_Factura() {
+        return statusRO_e_Factura;
+    }
+
+    public void setStatusRO_e_Factura(boolean statusRO_e_Factura) {
+        this.statusRO_e_Factura = statusRO_e_Factura;
+    }
+
+    public String getNrRegCom() {
+        return nrRegCom;
+    }
+
+    public void setNrRegCom(String nrRegCom) {
+        this.nrRegCom = nrRegCom;
+    }
+
+    public String getTelefon() {
+        return telefon;
+    }
+
+    public void setTelefon(String telefon) {
+        this.telefon = telefon;
+    }
+
+    public String getCodPostal() {
+        return codPostal;
+    }
+
+    public void setCodPostal(String codPostal) {
+        this.codPostal = codPostal;
+    }
+
+    public String getStare_inregistrare() {
+        return stare_inregistrare;
+    }
+
+    public void setStare_inregistrare(String stare_inregistrare) {
+        this.stare_inregistrare = stare_inregistrare;
+    }
+
+    @Override
+    public String toString() {
+        return "CompanyInfo{" + "cui=" + cui + ", data=" + data + ", denumire=" + denumire + ", adresa=" + adresa + ", nrRegCom=" + nrRegCom + ", telefon=" + telefon + ", codPostal=" + codPostal + ", stare_inregistrare=" + stare_inregistrare + ", scpTVA=" + scpTVA + ", data_inceput_ScpTVA=" + data_inceput_ScpTVA + ", data_sfarsit_ScpTVA=" + data_sfarsit_ScpTVA + ", data_anul_imp_ScpTVA=" + data_anul_imp_ScpTVA + ", mesaj_ScpTVA=" + mesaj_ScpTVA + ", dataInceputTvaInc=" + dataInceputTvaInc + ", dataSfarsitTvaInc=" + dataSfarsitTvaInc + ", dataActualizareTvaInc=" + dataActualizareTvaInc + ", dataPublicareTvaInc=" + dataPublicareTvaInc + ", tipActTvaInc=" + tipActTvaInc + ", statusTvaIncasare=" + statusTvaIncasare + ", dataInactivare=" + dataInactivare + ", dataReactivare=" + dataReactivare + ", dataPublicare=" + dataPublicare + ", dataRadiere=" + dataRadiere + ", statusInactivi=" + statusInactivi + ", dataInceputSplitTVA=" + dataInceputSplitTVA + ", dataAnulareSplitTVA=" + dataAnulareSplitTVA + ", statusSplitTVA=" + statusSplitTVA + ", iban=" + iban + ", statusRO_e_Factura=" + statusRO_e_Factura + '}';
+    }
+  
+    public List<Object> getValues() {
+        return Arrays.asList(getCui(),
+                getData(),
+                getDenumire(),                
+                getAdresa(),
+                getNrRegCom(),
+                getTelefon(),
+                getCodPostal(),
+                getStare_inregistrare(),
+                getScpTVA()?"DA":"NU",
+>>>>>>> beforedb
                 getData_inceput_ScpTVA(),
                 getData_sfarsit_ScpTVA(),
                 getData_anul_imp_ScpTVA(),
@@ -284,11 +370,16 @@ public class CompanyInfo {
                 getDataActualizareTvaInc(),
                 getDataPublicareTvaInc(),
                 getTipActTvaInc(),
+<<<<<<< HEAD
                 getStatusTvaIncasare(),
+=======
+                getStatusTvaIncasare()?"DA":"NU",
+>>>>>>> beforedb
                 getDataInactivare(),
                 getDataReactivare(),
                 getDataPublicare(),
                 getDataRadiere(),
+<<<<<<< HEAD
                 getStatusInactivi(),
                 getDataInceputSplitTVA(),
                 getDataAnulareSplitTVA(),
@@ -298,6 +389,17 @@ public class CompanyInfo {
     }
 
     @Transient
+=======
+                getStatusInactivi()?"DA":"NU",
+                getDataInceputSplitTVA(),
+                getDataAnulareSplitTVA(),
+                getStatusSplitTVA()?"DA":"NU",
+                getIban(),
+                getStatusRO_e_Factura()?"DA":"NU"
+        );
+    }
+    
+>>>>>>> beforedb
     public String getHtmlInfo() {
         StringBuilder sb = new StringBuilder();
         sb.append("<!doctype html>")
@@ -309,8 +411,17 @@ public class CompanyInfo {
                  .append("<tr><td>Data pt. care se efectueaza cautarea:</td><td><strong>").append(getData()).append("</td></tr>")
                  .append("<tr><td>Denumire:</td><td>").append(getDenumire()).append("</strong></td></tr>")
                 .append("<tr><td>Adresa:</td><td>").append(getAdresa()).append("</td></tr>")
+<<<<<<< HEAD
                 .append("<tr><td>Platitor  in scopuri de TVA la data cautata:</td><td>").append(
                         getScpTVA()==true ? "DA":"NU").append("</td></tr>")
+=======
+                .append("<tr><td>Nr. Reg. Com. :</td><td>").append(getNrRegCom()).append("</td></tr>")
+                .append("<tr><td>Telefon:</td><td>").append(getTelefon()).append("</td></tr>")
+                .append("<tr><td>Cod Postal:</td><td>").append(getCodPostal()).append("</td></tr>")
+                .append("<tr><td>Stare inregistrare:</td><td>").append(getStare_inregistrare()).append("</td></tr>")
+                .append("<tr><td>Platitor  in scopuri de TVA la data cautata:</td><td><strong>").append(
+                        getScpTVA() ? "DA":"NU").append("</strong></td></tr>")
+>>>>>>> beforedb
                 .append("<tr><td>Data inregistrarii in scopuri de TVA anterioara:</td><td>").append(
                         getData_inceput_ScpTVA()).append("</td></tr>")                
                 .append("<tr><td>Data anularii inregistrarii in scopuri de TVA:</td><td>").append(
@@ -330,7 +441,11 @@ public class CompanyInfo {
                   .append("<tr><td>Tip actualizare TVA la incasare:</td><td>").append(
                         getTipActTvaInc()).append("</td></tr>")
                   .append("<tr><td>Platitor TVA la incasare la data cautata:</td><td><strong>").append(
+<<<<<<< HEAD
                         getStatusTvaIncasare()==true?"DA":"NU").append("</strong></td></tr>")
+=======
+                        getStatusTvaIncasare()?"DA":"NU").append("</strong></td></tr>")
+>>>>>>> beforedb
                   .append("<tr><td>Data inactivare:</td><td>").append(
                         getDataInactivare()).append("</td></tr>")
                 .append("<tr><td>Data reactivare:</td><td>").append(
@@ -339,16 +454,29 @@ public class CompanyInfo {
                         getDataPublicare()).append("</td></tr>")
                 .append("<tr><td>Data radiere:</td><td>").append(
                         getDataRadiere()).append("</td></tr>")
+<<<<<<< HEAD
                 .append("<tr><td>Inactiv la data cautata:</td><td>").append(
                         getStatusInactivi()==true?"DA":"NU").append("</td></tr>")
+=======
+                .append("<tr><td>Inactiv la data cautata:</td><td><strong>").append(
+                        getStatusInactivi()?"DA":"NU").append("</strong></td></tr>")
+>>>>>>> beforedb
                  .append("<tr><td>Data inceput split TVA:</td><td>").append(
                         getDataInceputSplitTVA()).append("</td></tr>")
                 .append("<tr><td>Data anulare split TVA:</td><td>").append(
                         getDataAnulareSplitTVA()).append("</td></tr>")
                 .append("<tr><td>Aplica plata defalcata a Tva la data cautata:</td><td><strong>").append(
+<<<<<<< HEAD
                         getStatusSplitTVA()==true?"DA":"NU").append("</strong></td></tr>")                
                 .append("<tr><td>Contul IBAN:</td><td><strong>").append(
                         getIban()).append("</strong></td></tr>")
+=======
+                        getStatusSplitTVA()?"DA":"NU").append("</strong></td></tr>")                
+                .append("<tr><td>Contul IBAN:</td><td><strong>").append(
+                        getIban()).append("</strong></td></tr>")
+                  .append("<tr><td>Figureaza in Registrul RO e-Factura:</td><td><strong>").append(
+                        getStatusRO_e_Factura()?"DA":"NU").append("</strong></td></tr>")
+>>>>>>> beforedb
                 .append("</table>")
                 .append("</body></html>");
         return sb.toString();
