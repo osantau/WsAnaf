@@ -22,11 +22,11 @@ public class Application {
 
 	public static void main(String[] args) throws Exception {
 
-		String url = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v3/ws/tva";
+		String url = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v6/ws/tva";
 		final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 		ObjectMapper mapper = new ObjectMapper();
                 
-		List<CompanyReqInfo> lista = ReadCSV.getCompanyInfoFromFile(args[0],null);		
+		List<CompanyReqInfo> lista = ReadCSV.getCompanyInfoFromFile("d:/00/cuis.csv",";");		
 		String postBody = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(lista);
 		
 		OkHttpUtil.init(true);
@@ -37,7 +37,7 @@ public class Application {
 		String content = response.body().string();
 	
 		BaseObject baseObject = mapper.readValue(content, BaseObject.class);
-                WriteResultToCSV.writeToFile(baseObject, args[1]);		
+                WriteResultToCSV.writeToFile(baseObject, "d:/00/rezultat.csv");		
 	}
 
 }

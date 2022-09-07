@@ -5,7 +5,12 @@
  */
 package oct.soft;
 
+import java.awt.BorderLayout;
 import java.awt.Cursor;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -15,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -324,16 +330,20 @@ public class ApplicationUI extends javax.swing.JFrame {
                     sb.append(s+" = "+field.get(companyInfo)).append("<br />");
                 }
                 sb.append("</html>");
+                  Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
                  JEditorPane jEditorPane = new JEditorPane();
-                    jEditorPane.setEditable(false);
-                    JScrollPane scrollPane = new JScrollPane(jEditorPane); 
+                    jEditorPane.setEditable(false);                                                      
                     HTMLEditorKit kit = new HTMLEditorKit();
                     jEditorPane.setEditorKit(kit);
                     Document doc = kit.createDefaultDocument();                     
-                    jEditorPane.setDocument(doc);
-                    jEditorPane.setText(companyInfo.getHtmlInfo());
-                JOptionPane.showMessageDialog(rootPane, jEditorPane,"Informatii pt "+companyInfo.getDenumire(),
-                        JOptionPane.INFORMATION_MESSAGE);
+                    jEditorPane.setDocument(doc); 
+                    jEditorPane.setText(companyInfo.getHtmlInfo());                                                           
+                    JFrame responseFrame = new JFrame("Informatii pt. "+companyInfo.getDenumire());                    
+                    responseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    responseFrame.getContentPane().add(new JScrollPane(jEditorPane), BorderLayout.CENTER);
+                    responseFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//                    responseFrame.pack();
+                    responseFrame.setVisible(true);
                 }
                 catch (Exception ex){
                  JOptionPane.showMessageDialog(rootPane, ex.getMessage());

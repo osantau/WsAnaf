@@ -19,17 +19,17 @@ public class ReadCSV {
         
 	public static List<CompanyReqInfo> getCompanyInfoFromFile(String filePath, String csvSeparator)  {
 		List<CompanyReqInfo> companyInfoList = new ArrayList<CompanyReqInfo>();
-		SimpleDateFormat sdfIn = new SimpleDateFormat("dd.mm.yyyy");
-		SimpleDateFormat sdfOut = new SimpleDateFormat("yyyy-mm-dd");
+		SimpleDateFormat sdfIn = new SimpleDateFormat("dd.MM.yyyy");
+		SimpleDateFormat sdfOut = new SimpleDateFormat("yyyy-MM-dd");
 		Reader in;                 
                 char separator = (csvSeparator==null ? LocaleUtil.getPatternSeparator() : csvSeparator.charAt(0));
 		try {
 			in = new FileReader(filePath);			
-			Iterable<CSVRecord> records = CSVFormat.EXCEL.withDelimiter(separator).parse(in);
+			Iterable<CSVRecord> records = CSVFormat.DEFAULT.withDelimiter(separator).parse(in);
 			
 			for(CSVRecord record : records) {
 				Date tmpDate = sdfIn.parse(record.get(0));				
-//				System.out.println(sdfOut.format(tmpDate)+" | "+record.get(1));
+				System.out.println(record.get(0)+" | "+record.get(1));
 				companyInfoList.add(new CompanyReqInfo(Integer.valueOf(record.get(1)),sdfOut.format(tmpDate)));
 			numRecords++;
 			}
