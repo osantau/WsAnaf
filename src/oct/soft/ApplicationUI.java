@@ -23,11 +23,22 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLEditorKit;
+<<<<<<< HEAD
 import oct.soft.model.v7.AnafResult;
 import oct.soft.model.CompanyReqInfo;
 import oct.soft.model.v7.Found;
 import oct.soft.util.AnafResultUtil;
 import oct.soft.util.ConfigurationUtil;
+=======
+<<<<<<< HEAD
+import oct.soft.dao.CompanyInfoDao;
+=======
+>>>>>>> beforedb
+import oct.soft.model.BaseObject;
+import oct.soft.model.CompanyInfo;
+import oct.soft.model.CompanyReqInfo;
+import oct.soft.util.DBManager;
+>>>>>>> b44724e168da4a001b6cafb5887f27351e7675b3
 import oct.soft.util.OkHttpUtil;
 import oct.soft.util.ReadCSV;
 import oct.soft.util.WriteResultToCSV;
@@ -49,8 +60,14 @@ public class ApplicationUI extends javax.swing.JFrame {
      * Creates new form ApplicationUI
      */
     public ApplicationUI() {
+<<<<<<< HEAD
         ConfigurationUtil conf = new ConfigurationUtil();
         URL_ANAF = conf.URL_ANAF;
+=======
+        if(DBManager.isH2database()){
+         DBManager.startDB();   
+        }        
+>>>>>>> b44724e168da4a001b6cafb5887f27351e7675b3
         initComponents();
     }
 
@@ -101,6 +118,11 @@ public class ApplicationUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Verificare agenti economici");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setText("Selectati fisier sursa:");
@@ -261,7 +283,11 @@ public class ApplicationUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jFileChooserDestinatieActionPerformed
 
     private void jButtonProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProcessActionPerformed
+<<<<<<< HEAD
+        try {                             
+=======
         try {                           
+>>>>>>> beforedb
 		final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 		ObjectMapper mapper = new ObjectMapper();
                 csvSeparator = jComboBoxCsvSeparator.getSelectedItem().toString();
@@ -276,8 +302,16 @@ public class ApplicationUI extends javax.swing.JFrame {
 		Request request = new Request.Builder().url(URL_ANAF).post(body).build();
 		Response response = client.newCall(request).execute();
 		String content = response.body().string();	
+<<<<<<< HEAD
 		AnafResult anafResult = mapper.readValue(content, AnafResult.class);                
                 WriteResultToCSV.writeToFile(anafResult, destFilePath);	
+=======
+		BaseObject baseObject = mapper.readValue(content, BaseObject.class);
+                System.out.println(baseObject.getFound().size());
+                WriteResultToCSV.writeToFile(baseObject, destFilePath);	
+                CompanyInfoDao companyInfoDao = new CompanyInfoDao();
+                companyInfoDao.save(baseObject.getFound());
+>>>>>>> b44724e168da4a001b6cafb5887f27351e7675b3
                 jFileChooserSursa.setSelectedFile(new File(""));     
                 this.setCursor(Cursor.getDefaultCursor());
                 String message = "S-au procesat:"+WriteResultToCSV.numRecords+" din "+ReadCSV.numRecords+" !";
@@ -306,7 +340,11 @@ public class ApplicationUI extends javax.swing.JFrame {
             {
                 JOptionPane.showMessageDialog(rootPane, "Campul CIF este obligatoriu!","Atentie!",JOptionPane.ERROR_MESSAGE);
                 return;
+<<<<<<< HEAD
+            } else {               
+=======
             } else {                
+>>>>>>> beforedb
 		final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
                 ObjectMapper mapper = new ObjectMapper();
                 List<CompanyReqInfo> lista = new ArrayList<>();
@@ -321,6 +359,7 @@ public class ApplicationUI extends javax.swing.JFrame {
 		Request request = new Request.Builder().url(URL_ANAF).post(body).build();
 		Response response = client.newCall(request).execute();
 		String content = response.body().string();
+<<<<<<< HEAD
                 AnafResult anafResult = mapper.readValue(content, AnafResult.class);
                 Found found = anafResult.getFound().get(0);
 //                StringBuilder sb = new StringBuilder("<html>");
@@ -342,6 +381,43 @@ public class ApplicationUI extends javax.swing.JFrame {
                     responseFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 //                    responseFrame.pack();
                     responseFrame.setVisible(true);
+=======
+                BaseObject baseObject = mapper.readValue(content, BaseObject.class);
+                CompanyInfo companyInfo= baseObject.getFound().get(0);
+                CompanyInfoDao companyInfoDao = new CompanyInfoDao();
+                companyInfoDao.save(companyInfo);                
+                StringBuilder sb = new StringBuilder("<html>");
+                for (String s:WriteResultToCSV.getHeader()){
+                    Field field = companyInfo.getClass().getDeclaredField(s);
+                    field.setAccessible(true);
+                    sb.append(s+" = "+field.get(companyInfo)).append("<br />");
+                }
+                sb.append("</html>");
+<<<<<<< HEAD
+                    JEditorPane jEditorPane = new JEditorPane();
+=======
+                 JEditorPane jEditorPane = new JEditorPane();
+>>>>>>> beforedb
+                    jEditorPane.setEditable(false);
+                    JScrollPane scrollPane = new JScrollPane(jEditorPane); 
+                    HTMLEditorKit kit = new HTMLEditorKit();
+                    jEditorPane.setEditorKit(kit);
+                    Document doc = kit.createDefaultDocument();                     
+                    jEditorPane.setDocument(doc);
+                    jEditorPane.setText(companyInfo.getHtmlInfo());
+                JOptionPane.showMessageDialog(rootPane, jEditorPane,"Informatii pt "+companyInfo.getDenumire(),
+                        JOptionPane.INFORMATION_MESSAGE);
+              /*      SessionImpl session = (SessionImpl) HibernateUtil.getSessionFactory().openSession();
+                    
+                    JasperReport report = JasperCompileManager.compileReport("./reports/company.jrxml");
+                    Map<String, Object> parameters = new HashMap<String, Object>();
+                    parameters.put("CompanyInfoId",companyInfo.getId());
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, session.connection());
+                    session.close();
+                    JasperViewer viewer = new JasperViewer(jasperPrint);
+                    viewer.setVisible(true);*/
+                    
+>>>>>>> b44724e168da4a001b6cafb5887f27351e7675b3
                 }
                 catch (Exception ex){
                  JOptionPane.showMessageDialog(rootPane, ex.getMessage());
@@ -350,6 +426,13 @@ public class ApplicationUI extends javax.swing.JFrame {
             }                  
         }
     }//GEN-LAST:event_jButtonPunctualCheckActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        if(DBManager.isH2database()) {
+            DBManager.stopDB();
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -385,7 +468,7 @@ public class ApplicationUI extends javax.swing.JFrame {
             }
         });
     }
-     
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JButton btnOpenChooserSrcFile;
@@ -408,5 +491,13 @@ public class ApplicationUI extends javax.swing.JFrame {
   private String sourceFilePath;
   private String destFilePath;
   private String csvSeparator; 
+<<<<<<< HEAD
   private final String URL_ANAF;
+=======
+<<<<<<< HEAD
+  private final String url = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v4/ws/tva";
+=======
+  private final String URL_ANAF = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v6/ws/tva";
+>>>>>>> beforedb
+>>>>>>> b44724e168da4a001b6cafb5887f27351e7675b3
 }

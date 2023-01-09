@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="MSG" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT * FROM company_info]]>
+	</queryString>
+	<field name="ID" class="java.lang.Long"/>
+	<field name="ADRESA" class="java.lang.String"/>
+	<field name="CREATED" class="java.sql.Timestamp"/>
+	<field name="CUI" class="java.lang.Integer"/>
+	<field name="DATA" class="java.lang.String"/>
+	<field name="DATAACTUALIZARETVAINC" class="java.lang.String"/>
+	<field name="DATAANULARESPLITTVA" class="java.lang.String"/>
+	<field name="DATAINACTIVARE" class="java.lang.String"/>
+	<field name="DATAINCEPUTSPLITTVA" class="java.lang.String"/>
+	<field name="DATAINCEPUTTVAINC" class="java.lang.String"/>
+	<field name="DATAPUBLICARE" class="java.lang.String"/>
+	<field name="DATAPUBLICARETVAINC" class="java.lang.String"/>
+	<field name="DATARADIERE" class="java.lang.String"/>
+	<field name="DATAREACTIVARE" class="java.lang.String"/>
+	<field name="DATASFARSITTVAINC" class="java.lang.String"/>
+	<field name="DATA_ANUL_IMP_SCPTVA" class="java.lang.String"/>
+	<field name="DATA_INCEPUT_SCPTVA" class="java.lang.String"/>
+	<field name="DATA_SFARSIT_SCPTVA" class="java.lang.String"/>
+	<field name="DENUMIRE" class="java.lang.String"/>
+	<field name="MESAJ_SCPTVA" class="java.lang.String"/>
+	<field name="SCPTVA" class="java.lang.Boolean"/>
+	<field name="STATUSINACTIVI" class="java.lang.Boolean"/>
+	<field name="STATUSSPLITTVA" class="java.lang.Boolean"/>
+	<field name="STATUSTVAINCASARE" class="java.lang.Boolean"/>
+	<field name="TIPACTTVAINC" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="43" splitType="Stretch">
+			<staticText>
+				<reportElement x="344" y="12" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Raport]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="13" y="12" width="317" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{MSG}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="200" height="20"/>
+				<textElement/>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="200" height="20"/>
+				<textElement/>
+				<text><![CDATA[ADRESA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="0" width="200" height="20"/>
+				<textElement/>
+				<text><![CDATA[CREATED]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="600" y="0" width="200" height="20"/>
+				<textElement/>
+				<text><![CDATA[CUI]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="200" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{ID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="200" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ADRESA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="0" width="200" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{CREATED}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="600" y="0" width="200" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{CUI}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="31" splitType="Stretch">
+			<textField>
+				<reportElement x="700" y="11" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
