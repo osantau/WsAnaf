@@ -35,6 +35,7 @@ public class ReadCSV {
 			}
 			in.close();
 		} catch (Exception e) {
+                    e.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Verificati structura fisierului sursa: separator,data,cui!", "Eroare", JOptionPane.ERROR_MESSAGE);
                     throw new RuntimeException("Eroare");
 		} 				

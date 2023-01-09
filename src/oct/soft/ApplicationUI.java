@@ -7,12 +7,9 @@ package oct.soft;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
-import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.io.File;
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,9 +23,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLEditorKit;
-import oct.soft.model.BaseObject;
-import oct.soft.model.CompanyInfo;
+import oct.soft.model.v7.AnafResult;
 import oct.soft.model.CompanyReqInfo;
+import oct.soft.model.v7.Found;
+import oct.soft.util.AnafResultUtil;
+import oct.soft.util.ConfigurationUtil;
 import oct.soft.util.OkHttpUtil;
 import oct.soft.util.ReadCSV;
 import oct.soft.util.WriteResultToCSV;
@@ -50,6 +49,8 @@ public class ApplicationUI extends javax.swing.JFrame {
      * Creates new form ApplicationUI
      */
     public ApplicationUI() {
+        ConfigurationUtil conf = new ConfigurationUtil();
+        URL_ANAF = conf.URL_ANAF;
         initComponents();
     }
 
@@ -275,9 +276,8 @@ public class ApplicationUI extends javax.swing.JFrame {
 		Request request = new Request.Builder().url(URL_ANAF).post(body).build();
 		Response response = client.newCall(request).execute();
 		String content = response.body().string();	
-		BaseObject baseObject = mapper.readValue(content, BaseObject.class);
-                System.out.println(baseObject.getFound().size());
-                WriteResultToCSV.writeToFile(baseObject, destFilePath);	
+		AnafResult anafResult = mapper.readValue(content, AnafResult.class);                
+                WriteResultToCSV.writeToFile(anafResult, destFilePath);	
                 jFileChooserSursa.setSelectedFile(new File(""));     
                 this.setCursor(Cursor.getDefaultCursor());
                 String message = "S-au procesat:"+WriteResultToCSV.numRecords+" din "+ReadCSV.numRecords+" !";
@@ -321,15 +321,13 @@ public class ApplicationUI extends javax.swing.JFrame {
 		Request request = new Request.Builder().url(URL_ANAF).post(body).build();
 		Response response = client.newCall(request).execute();
 		String content = response.body().string();
-                BaseObject baseObject = mapper.readValue(content, BaseObject.class);
-                CompanyInfo companyInfo= baseObject.getFound().get(0);
-                StringBuilder sb = new StringBuilder("<html>");
-                for (String s:WriteResultToCSV.getHeader()){
-                    Field field = companyInfo.getClass().getDeclaredField(s);
-                    field.setAccessible(true);
-                    sb.append(s+" = "+field.get(companyInfo)).append("<br />");
-                }
-                sb.append("</html>");
+                AnafResult anafResult = mapper.readValue(content, AnafResult.class);
+                Found found = anafResult.getFound().get(0);
+//                StringBuilder sb = new StringBuilder("<html>");
+//                for (String s : WriteResultToCSV.getHeader()){                    
+//                    sb.append(s+" = "+field.get(companyInfo)).append("<br />");
+//                }
+//                sb.append("</html>");
                   Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
                  JEditorPane jEditorPane = new JEditorPane();
                     jEditorPane.setEditable(false);                                                      
@@ -337,8 +335,8 @@ public class ApplicationUI extends javax.swing.JFrame {
                     jEditorPane.setEditorKit(kit);
                     Document doc = kit.createDefaultDocument();                     
                     jEditorPane.setDocument(doc); 
-                    jEditorPane.setText(companyInfo.getHtmlInfo());                                                           
-                    JFrame responseFrame = new JFrame("Informatii pt. "+companyInfo.getDenumire());                    
+                    jEditorPane.setText(AnafResultUtil.getHtmlInfo(found));                                                           
+                    JFrame responseFrame = new JFrame("Informatii pt. "+found.getDateGenerale().getDenumire());                    
                     responseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     responseFrame.getContentPane().add(new JScrollPane(jEditorPane), BorderLayout.CENTER);
                     responseFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -349,10 +347,7 @@ public class ApplicationUI extends javax.swing.JFrame {
                  JOptionPane.showMessageDialog(rootPane, ex.getMessage());
                         }
                 
-            }
-                
-            System.out.println(cif.getText());
-            System.out.println(new SimpleDateFormat("yyyy-MM-dd").format(data.getDate()));
+            }                  
         }
     }//GEN-LAST:event_jButtonPunctualCheckActionPerformed
 
@@ -413,5 +408,5 @@ public class ApplicationUI extends javax.swing.JFrame {
   private String sourceFilePath;
   private String destFilePath;
   private String csvSeparator; 
-  private final String URL_ANAF = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v6/ws/tva";
+  private final String URL_ANAF;
 }
